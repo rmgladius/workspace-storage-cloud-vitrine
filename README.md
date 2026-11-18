@@ -80,6 +80,46 @@ conta estão o perfil, a verificação em duas etapas, a licença, os contratos,
 pessoais e o suporte por chamados. A equipe cuida de clientes, preços, cupons, contratos, e-mails e
 newsletter numa área administrativa própria.
 
+## Licença e pagamento
+
+<p align="center">
+  <img src="docs/imagens/licenca.png" alt="Tela Licença: faltam 118 dias para vencer, os meios de pagamento do Mercado Pago (cartão de crédito com parcelamento, débito, Pix e boleto) e o resumo com o cupom PARCEIRO50 tirando R$ 50,00 dos R$ 249,90 da licença." width="100%">
+</p>
+
+O cliente contrata a plataforma inteira por 12 meses, com preço por tipo de conta (pessoa física ou
+empresa). O pagamento acontece dentro do painel, no checkout do Mercado Pago, com cartão de crédito
+parcelado, débito, Pix ou boleto, e os dados do cartão vão direto para o Mercado Pago, sem passar
+pelo servidor. Na primeira compra, o cliente aceita os termos ali mesmo, e o aceite fica registrado
+com a versão do texto que ele leu. Renovar antes do vencimento não desperdiça nada: o tempo que
+resta é somado aos 12 meses novos. Contas de empresa têm três acessos simultâneos incluídos e podem
+chegar a dez.
+
+Quem confirma o pagamento é o webhook do Mercado Pago, e ele não confia no que recebe: a assinatura
+da notificação é conferida antes de tudo, e a situação do pagamento é consultada na API em vez de
+lida da mensagem. A notificação e a resposta do checkout costumam chegar juntas, e o pedido só muda
+de situação uma vez, então o acesso nunca é estendido em dobro. Os valores são guardados em
+centavos, sem conta com ponto flutuante, e ficam congelados no pedido.
+
+<p align="center">
+  <img src="docs/imagens/cobranca.png" alt="À esquerda, a tela de cupons da administração, com o formulário de novo cupom e três campanhas. À direita, o e-mail que avisa o cliente de que a licença vence em 30 dias, com o botão Renovar minha licença." width="100%">
+</p>
+
+A equipe muda os preços e cria cupons pelo painel, sem mexer no código: desconto percentual ou em
+reais, por tipo de conta, com limite de usos, limite por pessoa e prazo. O cupom só conta como usado
+quando o pagamento é aprovado, para que um checkout abandonado não gaste uma vaga da campanha. Antes
+de a licença vencer, o cliente recebe avisos por e-mail com 30, 15, 7 e 1 dia de antecedência.
+
+## Suporte
+
+<p align="center">
+  <img src="docs/imagens/chamados.png" alt="Atendimento de chamados: a fila à esquerda e, à direita, o pedido do cliente, os dados da conta dele e a resposta do suporte sendo escrita." width="100%">
+</p>
+
+O cliente abre chamados pelo painel, por assunto e com imagens anexadas. A equipe atende numa caixa
+de entrada com as filas de novos, meus, com o cliente e fechados, vê o resumo da conta ao lado da
+conversa e tem frases de abertura para os casos comuns. Cada resposta chega ao cliente como aviso no
+painel e por e-mail.
+
 ## O site
 
 <p align="center">
@@ -105,9 +145,10 @@ shadcn/ui. Todos os clientes ficam num banco MariaDB só, e o isolamento é feit
 tabela de cliente leva o identificador do ambiente, e uma guarda recusa a consulta que chegue a ela
 sem esse filtro. Assim tudo roda numa hospedagem compartilhada comum.
 
-A licença anual é paga pelo Mercado Pago. A conta tem verificação em duas etapas, limite de sessões
-simultâneas e trilha de auditoria, e cada página tem a sua política de segurança de conteúdo (CSP).
-O 3D usa three.js e web-ifc, e os mapas, Leaflet. São mais de 700 testes automatizados.
+A conta tem verificação em duas etapas, limite de acessos simultâneos e histórico de atividades com
+IP e aparelho. Desconectar um aparelho pede um código enviado ao e-mail do titular, e cada página tem
+a sua política de segurança de conteúdo (CSP). O 3D usa three.js e web-ifc, e os mapas, Leaflet. São
+mais de 700 testes automatizados.
 
 Laravel · PHP 8.4 · Inertia · React · TypeScript · Tailwind CSS · MariaDB · three.js · web-ifc ·
 Leaflet · Mercado Pago · PHPUnit
